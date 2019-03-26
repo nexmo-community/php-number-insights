@@ -1,0 +1,8 @@
+<?php
+
+// Copy config.php.sample to config.php and edit it as required
+
+// sign up for a Nexmo account here: https://dashboard.nexmo.com
+$config['api_key'] = "";
+$config['api_secret'] = "";
+

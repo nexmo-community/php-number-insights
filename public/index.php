@@ -39,9 +39,7 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
                 break;
         }
 
-        if ($insight && $insight['status'] == 0) {
-            return $view->render($response, 'main.php', ['insight' => $insight]);
-        }
+        return $view->render($response, 'main.php', ['insight' => $insight]);
     } catch (NexmoRequestException $requestError) {
         return $view->render(
             $response, 

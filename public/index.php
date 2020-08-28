@@ -1,61 +1,56 @@
 <?php
+
+use Nexmo\Client\Exception\Request as NexmoRequestException;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Slim\Factory\AppFactory;
 
 require '../vendor/autoload.php';
 require '../config.php';
 
-$app = new \Slim\App(['config' => $config]);
-$container = $app->getContainer();
+$app = AppFactory::create();
 
-// Register component on container
-$container['view'] = function ($container) {
-    return new \Slim\Views\PhpRenderer('../templates/');
-};
+$view = new \Slim\Views\PhpRenderer('../templates/');
 
-// handle errors ourselves
-unset($app->getContainer()['errorHandler']);
-unset($app->getContainer()['phpErrorHandler']);
-
-$app->get('/', function (Request $request, Response $response) {
-    return $this->view->render($response, "main.php", []);
+$app->get('/', function (Request $request, Response $response) use ($view) {
+    return $view->render($response, 'main.php', ['error' => false, 'insight' => null]);
 });
 
-$app->post('/insight', function (Request $request, Response $response) {
-    $params = $request->getParsedBody();
+$app->post('/insight', function (Request $request, Response $response) use ($view, $config) {
+    try {
+        $params = $request->getParsedBody();
 
-    $basic = new \Nexmo\Client\Credentials\Basic(
-        $this->config['api_key'],
-        $this->config['api_secret']
-    );
-    $client = new \Nexmo\Client($basic);
+        $basic = new \Nexmo\Client\Credentials\Basic(
+            $config['api_key'],
+            $config['api_secret']
+        );
+        $client = new \Nexmo\Client($basic);
 
-    // choose the correct insight type
-    switch($params['insight']) {
-        case "standard":
-            $insight = $client->insights()->standard($params['number']);
-            break;
-        case "advanced":
-            $insight = $client->insights()->advanced($params['number']);
-            break;
-        default:
-            $insight = $client->insights()->basic($params['number']);
-            break;
+        // choose the correct insight type
+        switch ($params['insight']) {
+            case 'standard':
+                $insight = $client->insights()->standard($params['number']);
+                break;
+            case 'advanced':
+                $insight = $client->insights()->advanced($params['number']);
+                break;
+            default:
+                $insight = $client->insights()->basic($params['number']);
+                break;
+        }
+
+        return $view->render($response, 'main.php', ['insight' => $insight]);
+    } catch (NexmoRequestException $requestError) {
+        return $view->render(
+            $response, 
+            'main.php', 
+            [
+                'error' => true, 
+                'error_message' => $requestError->getMessage(),
+                'insight' => $insight
+            ]
+        );
     }
-
-    if($insight && $insight['status'] == 0) {
-        return $this->view->render($response, "main.php", ["insight" => $insight]);
-    }
-
-    // if we get to here, something bad happened
-    $error = true;
-    if($insight && $insight['status']) {
-        $error_message = "Status " . $insight['status'] 
-            . ": " . $insight['status_message'];
-    }
-
-    return $this->view->render($response, "main.php", ["error" => $error, "error_message" => $error_message]);
-
 });
 
 $app->run();

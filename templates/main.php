@@ -2,14 +2,26 @@
 
 // at the top of a template is a shockingly lazy place to declare this
 function show($data, $field) {
+    $propertyMap = [
+        'country_code' => 'getCountryCode',
+        'country_name' => 'getCountryName',
+        'national_format_number' => 'getNationalFormatNumber',
+        'international_format_number' => 'getInternationalFormatNumber',
+        'valid_number' => 'getValidNumber',
+        'reachable' => 'getReachable',
+        'remaining_balance' => 'getRemainingBalance'
+    ];
+
     $output = "";
-    if(isset($data[$field])) {
+
+    if(method_exists($data, $propertyMap[$field])) {
         $output .= "<tr><td>";
         $output .= $field;
         $output .= "</td><td>";
-        $output .= $data[$field];
+        $output .= call_user_func(array($data, $propertyMap[$field]));
         $output .= "</td><tr>\n";
     }
+
     return $output;
 }
 ?>
@@ -87,13 +99,13 @@ function show($data, $field) {
                     echo "<p>\n";
                     echo "<table class=\"pure-table pure-table-striped\">\n";
                     echo "<td><b>Field</b></td><td><b>Value</b></td>";
-                    echo show($insight,'country_code');
-                    echo show($insight,'country_name');
-                    echo show($insight,'national_format_number');
-                    echo show($insight,'international_format_number');
-                    echo show($insight,'valid_number');
-                    echo show($insight,'reachable');
-                    echo show($insight,'remaining_balance');
+                    echo show($insight, 'country_code');
+                    echo show($insight, 'country_name');
+                    echo show($insight, 'national_format_number');
+                    echo show($insight, 'international_format_number');
+                    echo show($insight, 'valid_number');
+                    echo show($insight, 'reachable');
+                    echo show($insight, 'remaining_balance');
                     echo "</table>\n";
                     echo "</p>\n";
 

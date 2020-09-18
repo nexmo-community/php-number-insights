@@ -1,6 +1,6 @@
 <?php
 
-use Nexmo\Client\Exception\Request as NexmoRequestException;
+use Vonage\Client\Exception\Request as VonageRequestException;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use Slim\Factory\AppFactory;
@@ -20,11 +20,11 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
     try {
         $params = $request->getParsedBody();
 
-        $basic = new \Nexmo\Client\Credentials\Basic(
+        $basic = new \Vonage\Client\Credentials\Basic(
             $config['api_key'],
             $config['api_secret']
         );
-        $client = new \Nexmo\Client($basic);
+        $client = new \Vonage\Client($basic);
 
         // choose the correct insight type
         switch ($params['insight']) {
@@ -40,7 +40,7 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
         }
 
         return $view->render($response, 'main.php', ['insight' => $insight]);
-    } catch (NexmoRequestException $requestError) {
+    } catch (VonageRequestException $requestError) {
         return $view->render(
             $response, 
             'main.php', 

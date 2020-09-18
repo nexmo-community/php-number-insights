@@ -1,8 +1,8 @@
 {
     "require": {
-        "nexmo/client": "^2.0",
         "slim/slim": "^4.5",
         "slim/psr7": "^1.1",
-        "slim/php-view": "^3.0"
+        "slim/php-view": "^3.0",
+        "vonage/client": "^2.3"
     }
 }

@@ -1,3 +1,4 @@
 vendor/*
 config.php
 private.key
+public/advanced-insight-response.txt

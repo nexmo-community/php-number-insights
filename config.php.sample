@@ -5,4 +5,4 @@
 // sign up for a Vonage account here: https://dashboard.nexmo.com
 $config['api_key'] = "";
 $config['api_secret'] = "";
-
+$config['callback_url'] = "";

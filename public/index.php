@@ -61,8 +61,6 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
             [
                 'error' => true, 
                 'error_message' => $requestError->getMessage(),
-                'insight' => $insight,
-                'isAsyncRequest' => $isAsyncRequest
             ]
         );
     }

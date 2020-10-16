@@ -54,3 +54,5 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
 });
 
 $app->run();
+
+?>

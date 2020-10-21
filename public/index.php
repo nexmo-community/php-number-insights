@@ -67,7 +67,7 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
 });
 
 $app->post('/webhook/number-insight', function (Request $request, Response $response) {
-    $outputFile = fopen('advanced-insight-response.txt', 'a');
+    $outputFile = fopen('advanced-insight-response.txt', 'w');
 
     fwrite($outputFile, $request->getBody());
     fclose($outputFile);

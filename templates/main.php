@@ -109,9 +109,9 @@ function show($data, $field) {
                     echo "</table>\n";
                     echo "</p>\n";
 
-                elseif ($isAsyncRequest): ?>
+                elseif (isset($isAsyncRequest) && $isAsyncRequest): ?>
                     <p>
-                        An Asynchronous request was made. Please check your server logs for the inbound Advanced Asynchronous response.
+                        An Asynchronous request was made. Please check <a class="async-response-link" href="advanced-insight-response.txt" target="_blank">the advanced-insight-response.txt file</a> for the inbound Advanced Asynchronous response.
                     </p>
 
                 <?php else: ?>

@@ -95,7 +95,7 @@ function show($data, $field) {
 
             <div class="l-box-lrg pure-u-1 pure-u-md-3-5">
                 <h4>Phone number insights</h4>
-                <?php if($insight):
+                <?php if($insight && !$isAsyncRequest):
                     echo "<p>\n";
                     echo "<table class=\"pure-table pure-table-striped\">\n";
                     echo "<td><b>Field</b></td><td><b>Value</b></td>";
@@ -109,10 +109,15 @@ function show($data, $field) {
                     echo "</table>\n";
                     echo "</p>\n";
 
-                else: ?>
-                <p>
-                    Use our Number Insights API to get inside information on a phone number and its status.
-                </p>
+                elseif (isset($isAsyncRequest) && $isAsyncRequest): ?>
+                    <p>
+                        An Asynchronous request was made. Please check <a class="async-response-link" href="advanced-insight-response.txt" target="_blank">the advanced-insight-response.txt file</a> for the inbound Advanced Asynchronous response.
+                    </p>
+
+                <?php else: ?>
+                    <p>
+                        Use our Number Insights API to get inside information on a phone number and its status.
+                    </p>
 
                 <?php endif; ?>
             </div>

@@ -26,20 +26,34 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
         );
         $client = new \Vonage\Client($basic);
 
+        $isAsyncRequest = false;
+
         // choose the correct insight type
         switch ($params['insight']) {
             case 'standard':
                 $insight = $client->insights()->standard($params['number']);
                 break;
             case 'advanced':
-                $insight = $client->insights()->advanced($params['number']);
+                $isAsyncRequest = true;
+                $insight = $client->insights()->advancedAsync(
+                    $params['number'],
+                    $config['callback_url'] . '/webhook/number-insight'
+                );
                 break;
             default:
                 $insight = $client->insights()->basic($params['number']);
                 break;
         }
 
-        return $view->render($response, 'main.php', ['insight' => $insight]);
+        return $view->render(
+            $response,
+            'main.php',
+            [
+                'insight' => $insight,
+                'isAsyncRequest' => $isAsyncRequest,
+                'error' => false
+            ]
+        );
     } catch (VonageRequestException $requestError) {
         return $view->render(
             $response, 
@@ -47,10 +61,18 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
             [
                 'error' => true, 
                 'error_message' => $requestError->getMessage(),
-                'insight' => $insight
             ]
         );
     }
+});
+
+$app->post('/webhook/number-insight', function (Request $request, Response $response) {
+    $outputFile = fopen('advanced-insight-response.txt', 'w');
+
+    fwrite($outputFile, $request->getBody());
+    fclose($outputFile);
+
+    return $response;
 });
 
 $app->run();

@@ -25,8 +25,11 @@ label {
 }
 
 a {
-    color: #ffffff
+    color: #ffffff;
+}
 
+.async-response-link {
+    color: #2d3e50;
 }
 
 .pure-img-responsive {

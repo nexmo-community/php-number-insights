@@ -116,7 +116,7 @@ function show($data, $field) {
 
                 <?php else: ?>
                     <p>
-                        Use our Number Insights API to get inside information on a phone number and its status.
+                        Use our Number Insight API to get inside information on a phone number and its status.
                     </p>
 
                 <?php endif; ?>
@@ -131,7 +131,7 @@ function show($data, $field) {
             <h2 class="content-head content-head-ribbon">Learn More</h2>
 
             <p>
-                Visit our <a href="https://developer.nexmo.com/number-insight/overview">Developer Portal</a> for more information about the Number Insight API.
+                Visit our <a href="https://developer.vonage.com/en/number-insight/overview">Developer Portal</a> for more information about the Number Insight API.
             </p>
         </div>
     </div>

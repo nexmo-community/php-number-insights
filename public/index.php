@@ -1,16 +1,19 @@
 <?php
 
-use Vonage\Client\Exception\Request as VonageRequestException;
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Slim\Views\PhpRenderer;
 
-require '../vendor/autoload.php';
-require '../config.php';
+require __DIR__ . '/../vendor/autoload.php';
+$config = include __DIR__ . '/../config.php';
 
 $app = AppFactory::create();
 
-$view = new \Slim\Views\PhpRenderer('../templates/');
+$app->addErrorMiddleware(true, true, true);
+$app->addRoutingMiddleware();
+
+$view = new \Slim\Views\PhpRenderer(__DIR__ . '/../templates/');
 
 $app->get('/', function (Request $request, Response $response) use ($view) {
     return $view->render($response, 'main.php', ['error' => false, 'insight' => null]);
@@ -54,7 +57,7 @@ $app->post('/insight', function (Request $request, Response $response) use ($vie
                 'error' => false
             ]
         );
-    } catch (VonageRequestException $requestError) {
+    } catch (\Vonage\Client\Exception\Request $requestError) {
         return $view->render(
             $response, 
             'main.php', 
@@ -74,5 +77,6 @@ $app->post('/webhook/number-insight', function (Request $request, Response $resp
 
     return $response;
 });
+
 
 $app->run();

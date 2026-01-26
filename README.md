@@ -1,6 +1,6 @@
-# Use Vonage Number Insights with PHP
+# Use Vonage Number Insight with PHP
 
-This is a very simple demo app showing the [Number Insights API](https://developer.nexmo.com/number-insight/overview) in action.
+This is a very simple demo app showing the [Number Insight API](https://developer.vonage.com/en/number-insight/overview) in action.
 
 ## Getting Started
 
